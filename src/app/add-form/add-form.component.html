@@ -1,0 +1,21 @@
+<form [formGroup]="addForm" class="form">
+  <h2>Add Form</h2>
+  <mat-form-field appearance="outline" class="form-field-width">
+    <mat-label>Form Name</mat-label>
+    <input formControlName="formName" matInput placeholder="Form Name" />
+    <mat-error>Form Name is required</mat-error>
+  </mat-form-field>
+  <div class="button">
+    <button
+      class="back-list-btn"
+      [routerLink]="['/']"
+      mat-raised-button
+      color="warn"
+    >
+      Back to List
+    </button>
+    <button mat-raised-button (click)="addQuestions()" color="primary">
+      Add Questions
+    </button>
+  </div>
+</form>
