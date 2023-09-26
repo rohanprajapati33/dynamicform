@@ -16,6 +16,7 @@ import { AddQuestionsComponent } from './add-questions/add-questions.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatInputModule,
     MatSelectModule,
     MatToolbarModule,
+    MatRadioModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
