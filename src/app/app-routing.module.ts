@@ -14,7 +14,7 @@ const routes: Routes = [
     component: AddFormComponent,
   },
   {
-    path: 'add-que',
+    path: 'add-que/:formName',
     component: AddQuestionsComponent,
   },
 ];

@@ -7,3 +7,7 @@
 >
   <mat-icon [routerLink]="['/add-form']">add</mat-icon>
 </button>
+
+<div *ngFor="let form of formData">
+  <h1 class="form-name">{{ form.formName }}</h1>
+</div>
