@@ -87,17 +87,15 @@
       </mat-form-field>
     </div>
 
-    <div *ngFor="let validations of validationsList">
-      <div *ngIf="addQuestionsForm.get('validations')?.value === 'minLength'">
-        <mat-form-field appearance="outline" class="form-field-width">
-          <input matInput formControlName="minValue" />
-        </mat-form-field>
-      </div>
-      <div *ngIf="addQuestionsForm.get('validations')?.value === 'maxLength'">
-        <mat-form-field appearance="outline" class="form-field-width">
-          <input matInput formControlName="maxValue" />
-        </mat-form-field>
-      </div>
+    <div *ngIf="validationsControl?.value?.includes('minLength')">
+      <mat-form-field appearance="outline" class="form-field-width">
+        <input matInput placeholder="Min" formControlName="minValue" />
+      </mat-form-field>
+    </div>
+    <div *ngIf="validationsControl?.value?.includes('maxLength')">
+      <mat-form-field appearance="outline" class="form-field-width">
+        <input matInput placeholder="Max" formControlName="maxValue" />
+      </mat-form-field>
     </div>
   </form>
 
@@ -117,7 +115,8 @@
       class="questions"
       *ngFor="let question of addQuestionsFormArray; index as i"
     >
-      {{ question }}
+      {{ question?.questions }}
+
       <div class="button">
         <button mat-icon-button (click)="editQuestions(i)">
           <mat-icon>edit</mat-icon>
