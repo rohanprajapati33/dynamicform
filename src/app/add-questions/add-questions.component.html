@@ -110,7 +110,9 @@
   </button>
 
   <div class="form">
-    <h2>No Questions Available !</h2>
+    <h2 *ngIf="this.addQuestionsFormArray.length === 0">
+      No Questions Available !
+    </h2>
     <div
       class="questions"
       *ngFor="let question of addQuestionsFormArray; index as i"
