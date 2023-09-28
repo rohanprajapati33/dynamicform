@@ -17,6 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
+import { PreviewComponent } from './preview/preview.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { MatRadioModule } from '@angular/material/radio';
     FormComponent,
     AddQuestionsComponent,
     AddFormComponent,
+    PreviewComponent,
   ],
   imports: [
     BrowserModule,

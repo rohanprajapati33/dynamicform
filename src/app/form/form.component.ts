@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-form',
@@ -7,11 +8,11 @@ import { Component } from '@angular/core';
 })
 export class FormComponent {
   questionsData: any;
-  formData: any;
 
+  constructor(private router: Router, private route: ActivatedRoute) {}
   ngOnInit() {
     this.showQuestionsData();
-    this.showFormData();
+    console.log(this.questionsData);
   }
 
   showQuestionsData() {
@@ -21,8 +22,17 @@ export class FormComponent {
     return this.questionsData;
   }
 
-  showFormData() {
-    this.formData = JSON.parse(localStorage.getItem('add-form') as any);
-    return this.formData;
+  editFormDetails(index: number) {
+    this.router.navigateByUrl(`add-que/${this.questionsData[index].formName}`);
+  }
+
+  deleteFormDetails(index: number) {
+    this.questionsData.splice(index, 1);
+    localStorage.setItem('add-questions', JSON.stringify(this.questionsData));
+  }
+
+  previewFormDetails(index: number) {
+    // this.router.navigateByUrl(`add-que/${this.questionsData[index].formName}`);
+    this.router.navigate(['/preview']);
   }
 }

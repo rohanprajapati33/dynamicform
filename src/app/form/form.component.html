@@ -5,9 +5,26 @@
   class="add-form"
   [routerLink]="['/add-form']"
 >
-  <mat-icon [routerLink]="['/add-form']">add</mat-icon>
+  <mat-icon>add</mat-icon>
 </button>
 
-<div *ngFor="let form of formData">
-  <h1 class="form-name">{{ form.formName }}</h1>
+<div *ngFor="let form of questionsData; let i = index">
+  <div class="form">
+    <h1 class="form-name">{{ form.formName }}</h1>
+
+    <button mat-icon-button class="button-icon" (click)="editFormDetails(i)">
+      <mat-icon>edit</mat-icon>
+      <span class="icone-text">edit</span>
+    </button>
+
+    <button mat-icon-button class="button-icon" (click)="deleteFormDetails(i)">
+      <mat-icon>delete</mat-icon>
+      <span class="icone-text">delete</span>
+    </button>
+
+    <button mat-icon-button class="button-icon" (click)="previewFormDetails(i)">
+      <mat-icon>preview </mat-icon>
+      <span class="icone-text">preview</span>
+    </button>
+  </div>
 </div>

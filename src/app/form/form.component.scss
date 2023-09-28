@@ -5,10 +5,29 @@
   margin: 50px;
 }
 
-.form-name {
-  margin-top: 20px;
-
+.form {
+  margin: 20px;
   background-color: rgba(255, 255, 255, 0.571);
+  border-radius: 5px;
   height: 30%;
-  width: 30%;
+  width: 20%;
+}
+
+.form-name {
+  font-weight: bold;
+  margin: 10px;
+  padding: 10px;
+}
+
+.button-icon {
+  margin-bottom: 20px;
+}
+
+.button-icon > span.icone-text {
+  display: none;
+  font-size: medium;
+}
+
+.button-icon:hover > span.icone-text {
+  display: block;
 }
