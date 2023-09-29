@@ -32,7 +32,6 @@ export class FormComponent {
   }
 
   previewFormDetails(index: number) {
-    // this.router.navigateByUrl(`add-que/${this.questionsData[index].formName}`);
-    this.router.navigate(['/preview']);
+    this.router.navigate(['/preview', index]);
   }
 }
