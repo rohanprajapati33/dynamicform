@@ -23,7 +23,7 @@ export class AddQuestionsComponent {
   typeList: string[] = [
     'text',
     'number',
-    'textArea',
+    'textarea ',
     'date',
     'dropdown',
     'checkbox',
@@ -110,6 +110,7 @@ export class AddQuestionsComponent {
       });
     }
     localStorage.setItem('add-questions', JSON.stringify(storedQueData));
+    console.log(storedQueData);
   }
 
   showQuestions() {

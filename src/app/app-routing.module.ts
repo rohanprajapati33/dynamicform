@@ -21,7 +21,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'preview',
+    path: 'preview/:i',
     component: PreviewComponent,
   },
 ];

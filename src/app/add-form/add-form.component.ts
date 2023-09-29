@@ -20,7 +20,6 @@ export class AddFormComponent {
 
   addQuestions() {
     if (this.addForm.invalid) return;
-
     this.router.navigate(['/add-que', this.addForm.value.formName]);
   }
 }
