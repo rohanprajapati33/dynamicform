@@ -50,18 +50,13 @@
       </button>
     </div>
 
-    <div formArrayName="option">
+    <div formArrayName="option" *ngIf="!isEditable">
       <div
         *ngFor="let item of optionArray.controls; let i = index"
         [formGroupName]="i"
       >
         <mat-form-field appearance="outline" class="form-field-width">
-          <input formControlName="option1" matInput />
-          <mat-error>input field is required</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="form-field-width">
-          <input formControlName="option2" matInput />
+          <input formControlName="option" matInput />
           <mat-error>input field is required</mat-error>
         </mat-form-field>
       </div>
@@ -123,7 +118,7 @@
         <button mat-icon-button (click)="editQuestions(i)">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button (click)="removeQuestions(i)">
+        <button mat-icon-button (click)="removeQuestion(i)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>

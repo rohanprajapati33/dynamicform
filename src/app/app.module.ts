@@ -20,6 +20,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { PreviewComponent } from './preview/preview.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { NumberDirective } from './number.directive';
+import { DialogComponent } from './dialog/dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -28,6 +31,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     AddQuestionsComponent,
     AddFormComponent,
     PreviewComponent,
+    NumberDirective,
+    DialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,6 +48,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatRadioModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

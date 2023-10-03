@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { QuestionData } from '../model/questiondata';
 
 @Component({
   selector: 'app-add-questions',
@@ -12,7 +13,8 @@ export class AddQuestionsComponent {
   addQuestionsFormArray: any[] = [];
   isEditDetails: boolean = false;
   editIndex!: number;
-  questionToEdit!: any;
+  questionToEdit!: QuestionData[];
+  isEditable = false;
   formName: string = '';
 
   constructor(
@@ -23,7 +25,7 @@ export class AddQuestionsComponent {
   typeList: string[] = [
     'text',
     'number',
-    'textarea ',
+    'textarea',
     'date',
     'dropdown',
     'checkbox',
@@ -54,7 +56,11 @@ export class AddQuestionsComponent {
     this.formName = this.route.snapshot.paramMap.get('formName') || '';
     this.showQuestions();
   }
-
+  /**
+   *This Function is used to add Questions  and reset
+   *
+   * @memberof AddQuestionsComponent
+   */
   addQuestions() {
     if (this.addQuestionsForm.valid) {
       if (this.isEditDetails) {
@@ -65,33 +71,37 @@ export class AddQuestionsComponent {
       }
       this.saveToLocalstorage();
       this.addQuestionsForm.reset();
+      this.isEditable = true;
     }
   }
 
   optionFormGroup() {
     return this.formbuilder.group({
-      option1: [''],
-      option2: [''],
+      option: [''],
     });
   }
-
-  removeQuestions(index: number) {
-    this.addQuestionsFormArray.splice(index, 1);
-    localStorage.setItem(
-      'add-questions',
-      JSON.stringify(this.addQuestionsFormArray)
-    );
-  }
-
+  /**
+   *This Function is used to edit questions
+   *
+   * @param {number} index
+   * @memberof AddQuestionsComponent
+   */
   editQuestions(index: number) {
     this.isEditDetails = true;
+    this.isEditable = false;
     this.editIndex = index;
     this.questionToEdit = this.addQuestionsFormArray[index];
     this.addQuestionsForm.patchValue(this.questionToEdit);
   }
-
+  /**
+   *This function is stored questions data in localstorage
+   *
+   * @return {*}
+   * @memberof AddQuestionsComponent
+   */
   saveToLocalstorage() {
     if (this.addQuestionsForm.invalid) return;
+
     const formName = this.formName;
     const storedQueData = JSON.parse(
       localStorage.getItem('add-questions') || '[]'
@@ -112,17 +122,49 @@ export class AddQuestionsComponent {
     localStorage.setItem('add-questions', JSON.stringify(storedQueData));
     console.log(storedQueData);
   }
-
-  showQuestions() {
-    const storeData = JSON.parse(localStorage.getItem('add-questions') || '[]');
-    const formData = storeData.find(
-      (data: any) => data.formName === this.formName
+  /**
+   *This Function is remove questions as per index
+   *
+   * @param {number} index
+   * @memberof AddQuestionsComponent
+   */
+  removeQuestion(index: number) {
+    this.addQuestionsFormArray.splice(index, 1);
+    this.saveToLocalstorage();
+    const storedQueData = JSON.parse(
+      localStorage.getItem('add-questions') || '[]'
     );
-    if (formData) {
-      this.addQuestionsFormArray = formData.questions;
+    const formIndex = storedQueData.findIndex(
+      (data: QuestionData) => data.formName === this.formName
+    );
+
+    if (formIndex !== -1) {
+      storedQueData[formIndex].questions = this.addQuestionsFormArray;
+      localStorage.setItem('add-questions', JSON.stringify(storedQueData));
     }
   }
-
+  /**
+   
+   *This function is show questions
+   * @memberof AddQuestionsComponent
+   */
+  showQuestions() {
+    const storedData = localStorage.getItem('add-questions');
+    if (storedData) {
+      const storeData = JSON.parse(storedData);
+      const formData = storeData.find(
+        (data: QuestionData) => data.formName === this.formName
+      );
+      if (formData) {
+        this.addQuestionsFormArray = formData.questions;
+      }
+    }
+  }
+  /**
+   *This Functions is add options when dropdown select
+   *
+   * @memberof AddQuestionsComponent
+   */
   addOption() {
     this.optionArray.push(this.optionFormGroup());
   }

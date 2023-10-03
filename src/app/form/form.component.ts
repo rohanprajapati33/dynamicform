@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { QuestionData } from '../model/questiondata';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-form',
@@ -7,14 +10,24 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./form.component.scss'],
 })
 export class FormComponent {
-  questionsData: any;
+  questionsData!: QuestionData[];
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    public dialog: MatDialog
+  ) {}
+
   ngOnInit() {
     this.showQuestionsData();
     console.log(this.questionsData);
   }
-
+  /**
+   *This Function is show form-data
+   *
+   * @return {*}
+   * @memberof FormComponent
+   */
   showQuestionsData() {
     this.questionsData = JSON.parse(
       localStorage.getItem('add-questions') as any
@@ -25,10 +38,33 @@ export class FormComponent {
   editFormDetails(index: number) {
     this.router.navigateByUrl(`add-que/${this.questionsData[index].formName}`);
   }
-
-  deleteFormDetails(index: number) {
-    this.questionsData.splice(index, 1);
-    localStorage.setItem('add-questions', JSON.stringify(this.questionsData));
+  /**
+   *This Function is showing dialog box on delete icon
+   *
+   * @param {number} index
+   * @param {string} enterAnimationDuration
+   * @param {string} exitAnimationDuration
+   * @memberof FormComponent
+   */
+  deleteFormDetails(
+    index: number,
+    enterAnimationDuration: string,
+    exitAnimationDuration: string
+  ) {
+    const dialog = this.dialog.open(DialogComponent, {
+      width: '300px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+    dialog.afterClosed().subscribe((data) => {
+      if (data === 'ok') {
+        this.questionsData.splice(index, 1);
+        localStorage.setItem(
+          'add-questions',
+          JSON.stringify(this.questionsData)
+        );
+      }
+    });
   }
 
   previewFormDetails(index: number) {
