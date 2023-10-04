@@ -1,5 +1,12 @@
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { QuestionData } from '../model/questiondata';
 
@@ -53,15 +60,46 @@ export class AddQuestionsComponent {
       maxValue: [''],
     });
 
+    this.addQuestionsForm.get('type')?.valueChanges.subscribe((value) => {
+      const inputControl1 = this.addQuestionsForm.get('inputField1');
+      const inputControl2 = this.addQuestionsForm.get('inputField2');
+
+      if (value === 'checkbox' || value === 'radio') {
+        inputControl1?.setValidators([Validators.required]);
+        inputControl2?.setValidators([Validators.required]);
+      } else {
+        inputControl1?.clearValidators();
+        inputControl2?.clearValidators();
+      }
+      inputControl1?.updateValueAndValidity();
+      inputControl2?.updateValueAndValidity();
+    });
     this.formName = this.route.snapshot.paramMap.get('formName') || '';
     this.showQuestions();
   }
+
+  optionArrayValidator(
+    control: AbstractControl
+  ): { [key: string]: boolean } | null {
+    const options = control.get('option') as FormArray;
+    let hasValue = false;
+
+    options.controls.forEach((option: AbstractControl) => {
+      if (option.value && option.value.trim() !== '') {
+        hasValue = true;
+      }
+    });
+
+    return hasValue ? null : { optionsEmpty: true };
+  }
+
   /**
    *This Function is used to add Questions  and reset
    *
    * @memberof AddQuestionsComponent
    */
   addQuestions() {
+    console.log(this.addQuestionsForm);
     if (this.addQuestionsForm.valid) {
       if (this.isEditDetails) {
         this.addQuestionsFormArray[this.editIndex] =
@@ -69,8 +107,11 @@ export class AddQuestionsComponent {
       } else {
         this.addQuestionsFormArray.push(this.addQuestionsForm.value);
       }
+      console.log(this.addQuestionsForm);
+      console.log(this.addQuestionsFormArray);
       this.saveToLocalstorage();
       this.addQuestionsForm.reset();
+      this.addQuestionsForm.clearValidators();
       this.isEditable = true;
     }
   }
@@ -80,6 +121,7 @@ export class AddQuestionsComponent {
       option: [''],
     });
   }
+
   /**
    *This Function is used to edit questions
    *

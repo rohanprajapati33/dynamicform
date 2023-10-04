@@ -20,7 +20,6 @@ export class FormComponent {
 
   ngOnInit() {
     this.showQuestionsData();
-    console.log(this.questionsData);
   }
   /**
    *This Function is show form-data
@@ -30,7 +29,7 @@ export class FormComponent {
    */
   showQuestionsData() {
     this.questionsData = JSON.parse(
-      localStorage.getItem('add-questions') as any
+      localStorage.getItem('add-questions') as string
     );
     return this.questionsData;
   }
@@ -46,11 +45,9 @@ export class FormComponent {
    * @param {string} exitAnimationDuration
    * @memberof FormComponent
    */
-  deleteFormDetails(
-    index: number,
-    enterAnimationDuration: string,
-    exitAnimationDuration: string
-  ) {
+  deleteFormDetails(index: number) {
+    const enterAnimationDuration = '0ms';
+    const exitAnimationDuration = '0ms';
     const dialog = this.dialog.open(DialogComponent, {
       width: '300px',
       enterAnimationDuration,

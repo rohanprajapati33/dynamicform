@@ -1,6 +1,6 @@
 export interface QuestionData {
   questions: string;
-  type: number;
+  type: string;
   option: Option[];
   validations: string[];
   inputField1: string;
@@ -11,5 +11,5 @@ export interface QuestionData {
 }
 
 export interface Option {
-  value: string;
+  option: string;
 }
