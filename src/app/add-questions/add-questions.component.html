@@ -34,6 +34,7 @@
         (click)="addQuestions()"
         mat-raised-button
         color="warn"
+        type="button"
       >
         Add Questions to Form
       </button>
@@ -45,6 +46,7 @@
         (click)="addOption()"
         mat-raised-button
         color="warn"
+        type="button"
       >
         Add option
       </button>
@@ -64,33 +66,50 @@
 
     <div *ngIf="addQuestionsForm.get('type')?.value === 'checkbox'">
       <mat-form-field appearance="outline" class="form-field-width">
-        <input matInput formControlName="inputField1" />
+        <input matInput formControlName="checkBox1" />
+        <mat-error>CheckBox Field is required</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="form-field-width">
-        <input matInput formControlName="inputField2" />
+        <input matInput formControlName="checkBox2" />
+        <mat-error>CheckBox Field is required</mat-error>
       </mat-form-field>
     </div>
 
     <div *ngIf="addQuestionsForm.get('type')?.value === 'radio'">
       <mat-form-field appearance="outline" class="form-field-width">
-        <input matInput formControlName="inputField1" />
+        <input matInput formControlName="radioBox1" />
+        <mat-error>Radio Field is required</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="form-field-width">
-        <input matInput formControlName="inputField2" />
+        <input matInput formControlName="radioBox2" />
+        <mat-error>Radio Field is required</mat-error>
       </mat-form-field>
     </div>
 
-    <div *ngIf="validationsControl?.value?.includes('minLength')">
-      <mat-form-field appearance="outline" class="form-field-width">
-        <input matInput placeholder="Min" formControlName="minValue" />
-      </mat-form-field>
-    </div>
-    <div *ngIf="validationsControl?.value?.includes('maxLength')">
-      <mat-form-field appearance="outline" class="form-field-width">
-        <input matInput placeholder="Max" formControlName="maxValue" />
-      </mat-form-field>
+    <div *ngIf="addQuestionsForm.get('type')?.value === 'number'">
+      <div *ngIf="validationsControl?.value?.includes('minLength')">
+        <mat-form-field appearance="outline" class="form-field-width">
+          <input
+            numbersRequire
+            matInput
+            placeholder="Min"
+            minlength="1"
+            formControlName="minValue"
+          />
+        </mat-form-field>
+      </div>
+      <div *ngIf="validationsControl?.value?.includes('maxLength')">
+        <mat-form-field appearance="outline" class="form-field-width">
+          <input
+            numbersRequire
+            matInput
+            placeholder="Max"
+            formControlName="maxValue"
+          />
+        </mat-form-field>
+      </div>
     </div>
   </form>
 
@@ -115,10 +134,10 @@
       {{ question?.questions }}
 
       <div class="button">
-        <button mat-icon-button (click)="editQuestions(i)">
+        <button mat-icon-button (click)="editQuestions(i)" class="btn">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button (click)="removeQuestion(i)">
+        <button mat-icon-button (click)="removeQuestion(i)" class="btn">
           <mat-icon>delete</mat-icon>
         </button>
       </div>

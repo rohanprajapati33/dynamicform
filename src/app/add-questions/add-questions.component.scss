@@ -27,7 +27,8 @@
 .questions {
   background-color: rgba(255, 0, 0, 0.61);
   color: white;
-  height: 45px;
+  text-align: center;
+  padding: 17px;
   margin: 10px;
   row-gap: 10px;
   border-radius: 5px;
@@ -37,8 +38,13 @@
 
 .button {
   float: right;
+  text-align: center;
 }
 
 .add-option-btn {
   margin: 10px 0 10px 0;
+}
+
+.btn {
+  padding-bottom: 10px;
 }

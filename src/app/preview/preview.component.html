@@ -93,11 +93,11 @@
           *ngIf="formData.type === 'radio'"
           aria-label="Select an option"
         >
-          <mat-radio-button value="">{{
-            formData.inputField1
+          <mat-radio-button value="{{ formData.radioBox1 }}">{{
+            formData.radioBox1
           }}</mat-radio-button>
-          <mat-radio-button value="">{{
-            formData.inputField2
+          <mat-radio-button value="{{ formData.radioBox2 }}">{{
+            formData.radioBox2
           }}</mat-radio-button>
         </mat-radio-group>
       </div>
@@ -113,11 +113,11 @@
           [placeholder]="formData.questions"
           formControlName="checkbox"
         >
-          <mat-option value="{{ formData.inputField1 }}">{{
-            formData.inputField1
+          <mat-option value="{{ formData.checkBox1 }}">{{
+            formData.checkBox1
           }}</mat-option>
-          <mat-option value="{{ formData.inputField2 }}">{{
-            formData.inputField2
+          <mat-option value="{{ formData.checkBox2 }}">{{
+            formData.checkBox2
           }}</mat-option>
         </mat-select>
         <mat-error *ngIf="formData.validations"

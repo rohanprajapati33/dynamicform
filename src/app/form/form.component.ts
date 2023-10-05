@@ -54,7 +54,7 @@ export class FormComponent {
       exitAnimationDuration,
     });
     dialog.afterClosed().subscribe((data) => {
-      if (data === 'ok') {
+      if (data) {
         this.questionsData.splice(index, 1);
         localStorage.setItem(
           'add-questions',

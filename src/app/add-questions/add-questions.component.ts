@@ -3,7 +3,6 @@ import {
   AbstractControl,
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
@@ -23,6 +22,7 @@ export class AddQuestionsComponent {
   questionToEdit!: QuestionData[];
   isEditable = false;
   formName: string = '';
+  isOption = false;
 
   constructor(
     private formbuilder: FormBuilder,
@@ -38,7 +38,7 @@ export class AddQuestionsComponent {
     'checkbox',
     'radio',
   ];
-  validationsList: string[] = ['required', 'minLength', 'maxLength'];
+  validationsList: string[] = ['required'];
 
   get optionArray() {
     return this.addQuestionsForm.get('option') as FormArray;
@@ -54,66 +54,87 @@ export class AddQuestionsComponent {
       type: ['', Validators.required],
       option: this.formbuilder.array([]),
       validations: ['', Validators.required],
-      inputField1: [''],
-      inputField2: [''],
+      checkBox1: [''],
+      checkBox2: [''],
+      radioBox1: [''],
+      radioBox2: [''],
       minValue: [''],
       maxValue: [''],
     });
 
     this.addQuestionsForm.get('type')?.valueChanges.subscribe((value) => {
-      const inputControl1 = this.addQuestionsForm.get('inputField1');
-      const inputControl2 = this.addQuestionsForm.get('inputField2');
+      const checkboxInput1 = this.addQuestionsForm.get('checkBox1');
+      const checkboxInput2 = this.addQuestionsForm.get('checkBox2');
+      const radioInput1 = this.addQuestionsForm.get('radioBox1');
+      const radioInput2 = this.addQuestionsForm.get('radioBox2');
+      const minValue = this.addQuestionsForm.get('minValue');
+      const maxValue = this.addQuestionsForm.get('maxValue');
 
-      if (value === 'checkbox' || value === 'radio') {
-        inputControl1?.setValidators([Validators.required]);
-        inputControl2?.setValidators([Validators.required]);
+      if (value === 'number') {
+        this.validationsList = ['required', 'minLength', 'maxLength'];
       } else {
-        inputControl1?.clearValidators();
-        inputControl2?.clearValidators();
+        this.validationsList = ['required'];
       }
-      inputControl1?.updateValueAndValidity();
-      inputControl2?.updateValueAndValidity();
+
+      if (value === 'checkbox') {
+        checkboxInput1?.setValidators([Validators.required]);
+        checkboxInput2?.setValidators([Validators.required]);
+      } else {
+        checkboxInput1?.clearValidators();
+        checkboxInput2?.clearValidators();
+      }
+      if (value === 'radio') {
+        radioInput1?.setValidators([Validators.required]);
+        radioInput2?.setValidators([Validators.required]);
+      } else {
+        radioInput1?.clearValidators();
+        radioInput2?.clearValidators();
+      }
+      if (value === 'dropdown') {
+        this.optionArray.controls.forEach((control: AbstractControl) => {
+          control.get('option')?.setValidators([Validators.required]);
+          control.get('option')?.updateValueAndValidity();
+        });
+      } else {
+        this.optionArray.controls.forEach((control: AbstractControl) => {
+          control.get('option')?.clearValidators();
+          control.get('option')?.updateValueAndValidity();
+        });
+      }
+
+      if (value === 'number') {
+        minValue?.setValidators([Validators.required]);
+        maxValue?.setValidators([Validators.required]);
+      } else {
+        minValue?.clearValidators();
+        maxValue?.clearValidators();
+      }
     });
+
     this.formName = this.route.snapshot.paramMap.get('formName') || '';
     this.showQuestions();
   }
 
-  optionArrayValidator(
-    control: AbstractControl
-  ): { [key: string]: boolean } | null {
-    const options = control.get('option') as FormArray;
-    let hasValue = false;
-
-    options.controls.forEach((option: AbstractControl) => {
-      if (option.value && option.value.trim() !== '') {
-        hasValue = true;
-      }
-    });
-
-    return hasValue ? null : { optionsEmpty: true };
-  }
-
-  /**
-   *This Function is used to add Questions  and reset
-   *
-   * @memberof AddQuestionsComponent
-   */
   addQuestions() {
-    console.log(this.addQuestionsForm);
     if (this.addQuestionsForm.valid) {
       if (this.isEditDetails) {
         this.addQuestionsFormArray[this.editIndex] =
           this.addQuestionsForm.value;
       } else {
+        if (
+          this.addQuestionsForm.get('type')?.value === 'dropdown' &&
+          this.optionArray.length === 0
+        ) {
+          return;
+        }
         this.addQuestionsFormArray.push(this.addQuestionsForm.value);
       }
-      console.log(this.addQuestionsForm);
-      console.log(this.addQuestionsFormArray);
       this.saveToLocalstorage();
       this.addQuestionsForm.reset();
-      this.addQuestionsForm.clearValidators();
       this.isEditable = true;
     }
+    this.addQuestionsForm.markAllAsTouched();
+    this.optionArray.markAllAsTouched();
   }
 
   optionFormGroup() {
@@ -122,12 +143,6 @@ export class AddQuestionsComponent {
     });
   }
 
-  /**
-   *This Function is used to edit questions
-   *
-   * @param {number} index
-   * @memberof AddQuestionsComponent
-   */
   editQuestions(index: number) {
     this.isEditDetails = true;
     this.isEditable = false;
@@ -135,23 +150,16 @@ export class AddQuestionsComponent {
     this.questionToEdit = this.addQuestionsFormArray[index];
     this.addQuestionsForm.patchValue(this.questionToEdit);
   }
-  /**
-   *This function is stored questions data in localstorage
-   *
-   * @return {*}
-   * @memberof AddQuestionsComponent
-   */
+
   saveToLocalstorage() {
     if (this.addQuestionsForm.invalid) return;
-
     const formName = this.formName;
-    const storedQueData = JSON.parse(
-      localStorage.getItem('add-questions') || '[]'
-    );
-    const formIndex = storedQueData.findIndex(
-      (data: any) => data.formName === formName
-    );
+    let storedQueData =
+      JSON.parse(localStorage.getItem('add-questions') as any) || [];
 
+    const formIndex = storedQueData.findIndex(
+      (data: QuestionData) => data.formName === formName
+    );
     if (formIndex !== -1) {
       storedQueData[formIndex].questions = this.addQuestionsFormArray;
       this.isEditDetails = false;
@@ -164,12 +172,7 @@ export class AddQuestionsComponent {
     localStorage.setItem('add-questions', JSON.stringify(storedQueData));
     console.log(storedQueData);
   }
-  /**
-   *This Function is remove questions as per index
-   *
-   * @param {number} index
-   * @memberof AddQuestionsComponent
-   */
+
   removeQuestion(index: number) {
     this.addQuestionsFormArray.splice(index, 1);
     this.saveToLocalstorage();
@@ -185,11 +188,7 @@ export class AddQuestionsComponent {
       localStorage.setItem('add-questions', JSON.stringify(storedQueData));
     }
   }
-  /**
-   
-   *This function is show questions
-   * @memberof AddQuestionsComponent
-   */
+
   showQuestions() {
     const storedData = localStorage.getItem('add-questions');
     if (storedData) {
@@ -202,12 +201,16 @@ export class AddQuestionsComponent {
       }
     }
   }
-  /**
-   *This Functions is add options when dropdown select
-   *
-   * @memberof AddQuestionsComponent
-   */
+
   addOption() {
-    this.optionArray.push(this.optionFormGroup());
+    if (this.optionArray.invalid) {
+      return;
+    }
+    const optionGroup = this.optionFormGroup();
+    if (this.addQuestionsForm.get('type')?.value === 'dropdown') {
+      optionGroup.get('option')?.setValidators([Validators.required]);
+      optionGroup.get('option')?.updateValueAndValidity();
+    }
+    this.optionArray.push(optionGroup);
   }
 }
