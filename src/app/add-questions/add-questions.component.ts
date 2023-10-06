@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { QuestionData } from '../model/questiondata';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-questions',
@@ -22,13 +23,6 @@ export class AddQuestionsComponent {
   questionToEdit!: QuestionData[];
   isEditable = false;
   formName: string = '';
-  isOption = false;
-
-  constructor(
-    private formbuilder: FormBuilder,
-    private route: ActivatedRoute
-  ) {}
-
   typeList: string[] = [
     'text',
     'number',
@@ -40,6 +34,12 @@ export class AddQuestionsComponent {
   ];
   validationsList: string[] = ['required'];
 
+  constructor(
+    private formbuilder: FormBuilder,
+    private route: ActivatedRoute,
+    public toastr: ToastrService
+  ) {}
+
   get optionArray() {
     return this.addQuestionsForm.get('option') as FormArray;
   }
@@ -47,7 +47,11 @@ export class AddQuestionsComponent {
   get validationsControl() {
     return this.addQuestionsForm.get('validations') as FormArray;
   }
-
+  /**
+   *on ngOnInit form's questions value show and set dynamic validation for checkbox , radio and option
+   *
+   * @memberof AddQuestionsComponent
+   */
   ngOnInit() {
     this.addQuestionsForm = this.formbuilder.group({
       questions: ['', Validators.required],
@@ -110,31 +114,41 @@ export class AddQuestionsComponent {
         maxValue?.clearValidators();
       }
     });
-
     this.formName = this.route.snapshot.paramMap.get('formName') || '';
     this.showQuestions();
   }
-
+  /**
+   *This function is used to add-questions and save data to localstorage and reset the form value
+   *
+   * @return {*}
+   * @memberof AddQuestionsComponent
+   */
   addQuestions() {
+    if (
+      this.addQuestionsForm.get('type')?.value === 'dropdown' &&
+      this.optionArray.length === 0
+    ) {
+      this.toastr.error('You must add at least one option for dropdown type.');
+      return;
+    }
+
     if (this.addQuestionsForm.valid) {
       if (this.isEditDetails) {
         this.addQuestionsFormArray[this.editIndex] =
           this.addQuestionsForm.value;
       } else {
-        if (
-          this.addQuestionsForm.get('type')?.value === 'dropdown' &&
-          this.optionArray.length === 0
-        ) {
-          return;
-        }
         this.addQuestionsFormArray.push(this.addQuestionsForm.value);
       }
       this.saveToLocalstorage();
       this.addQuestionsForm.reset();
+      this.addQuestionsForm.markAsPristine();
+      this.addQuestionsForm.markAsUntouched();
+      this.addQuestionsForm.updateValueAndValidity();
       this.isEditable = true;
+    } else {
+      this.addQuestionsForm.markAllAsTouched();
+      this.optionArray.markAllAsTouched();
     }
-    this.addQuestionsForm.markAllAsTouched();
-    this.optionArray.markAllAsTouched();
   }
 
   optionFormGroup() {
@@ -142,7 +156,12 @@ export class AddQuestionsComponent {
       option: [''],
     });
   }
-
+  /**
+   *This function is used to edit questions
+   *
+   * @param {number} index
+   * @memberof AddQuestionsComponent
+   */
   editQuestions(index: number) {
     this.isEditDetails = true;
     this.isEditable = false;
@@ -150,7 +169,12 @@ export class AddQuestionsComponent {
     this.questionToEdit = this.addQuestionsFormArray[index];
     this.addQuestionsForm.patchValue(this.questionToEdit);
   }
-
+  /**
+   *This function is save data of formname and questions to localstorage with
+   *
+   * @return {*}
+   * @memberof AddQuestionsComponent
+   */
   saveToLocalstorage() {
     if (this.addQuestionsForm.invalid) return;
     const formName = this.formName;
@@ -172,7 +196,12 @@ export class AddQuestionsComponent {
     localStorage.setItem('add-questions', JSON.stringify(storedQueData));
     console.log(storedQueData);
   }
-
+  /**
+   *This function is used to remove questions
+   *
+   * @param {number} index
+   * @memberof AddQuestionsComponent
+   */
   removeQuestion(index: number) {
     this.addQuestionsFormArray.splice(index, 1);
     this.saveToLocalstorage();
@@ -201,16 +230,19 @@ export class AddQuestionsComponent {
       }
     }
   }
-
+  /**
+   *This function used to add option after click dropdown type
+   *
+   * @return {*}
+   * @memberof AddQuestionsComponent
+   */
   addOption() {
     if (this.optionArray.invalid) {
       return;
     }
     const optionGroup = this.optionFormGroup();
-    if (this.addQuestionsForm.get('type')?.value === 'dropdown') {
-      optionGroup.get('option')?.setValidators([Validators.required]);
-      optionGroup.get('option')?.updateValueAndValidity();
-    }
+    optionGroup.get('option')?.setValidators([Validators.required]);
+    optionGroup.get('option')?.updateValueAndValidity();
     this.optionArray.push(optionGroup);
   }
 }

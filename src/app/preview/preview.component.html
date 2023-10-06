@@ -93,6 +93,7 @@
           *ngIf="formData.type === 'radio'"
           aria-label="Select an option"
         >
+          <mat-label>{{ formData.questions }}</mat-label>
           <mat-radio-button value="{{ formData.radioBox1 }}">{{
             formData.radioBox1
           }}</mat-radio-button>

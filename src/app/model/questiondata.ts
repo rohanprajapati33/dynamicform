@@ -3,8 +3,10 @@ export interface QuestionData {
   type: string;
   option: Option[];
   validations: string[];
-  inputField1: string;
-  inputField2: string;
+  checkBox1: string;
+  checkBox2: string;
+  radioBox1: string;
+  radioBox2: string;
   minValue: number | null;
   maxValue: number | null;
   formName: string;

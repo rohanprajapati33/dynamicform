@@ -1,13 +1,13 @@
 <div class="addQuestionsForm">
   <form class="form" [formGroup]="addQuestionsForm">
     <h2>Add Questions</h2>
-    <mat-form-field appearance="outline" class="form-field-width">
+    <mat-form-field appearance="outline" class="form-field">
       <mat-label>Questions</mat-label>
       <input formControlName="questions" matInput placeholder="Questions" />
       <mat-error>Questions is required</mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="form-field">
       <mat-label>Type</mat-label>
       <mat-select required formControlName="type">
         <mat-option *ngFor="let type of typeList" [value]="type">
@@ -17,7 +17,7 @@
       <mat-error>Type is required</mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="form-field">
       <mat-label>Validations</mat-label>
       <mat-select multiple formControlName="validations">
         <mat-option
@@ -98,6 +98,7 @@
             minlength="1"
             formControlName="minValue"
           />
+          <mat-error>MinLength is required</mat-error>
         </mat-form-field>
       </div>
       <div *ngIf="validationsControl?.value?.includes('maxLength')">
@@ -108,6 +109,7 @@
             placeholder="Max"
             formControlName="maxValue"
           />
+          <mat-error>MaxLength is required</mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -131,15 +133,18 @@
       class="questions"
       *ngFor="let question of addQuestionsFormArray; index as i"
     >
-      {{ question?.questions }}
-
-      <div class="button">
-        <button mat-icon-button (click)="editQuestions(i)" class="btn">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button (click)="removeQuestion(i)" class="btn">
-          <mat-icon>delete</mat-icon>
-        </button>
+      <div class="question-content">
+        <div class="question-text">
+          {{ question?.questions }}
+        </div>
+        <div class="button">
+          <button mat-icon-button (click)="editQuestions(i)" class="btn">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="removeQuestion(i)" class="btn">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
       </div>
     </div>
   </div>

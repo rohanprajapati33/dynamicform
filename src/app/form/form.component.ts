@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { QuestionData } from '../model/questiondata';
+import { Router } from '@angular/router';
+
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from '../dialog/dialog.component';
+import { QuestionData } from '../model/questiondata';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-form',
@@ -12,11 +13,7 @@ import { DialogComponent } from '../dialog/dialog.component';
 export class FormComponent {
   questionsData!: QuestionData[];
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    public dialog: MatDialog
-  ) {}
+  constructor(private router: Router, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.showQuestionsData();
@@ -39,7 +36,7 @@ export class FormComponent {
   }
   /**
    *This Function is showing dialog box on delete icon
-   *
+   
    * @param {number} index
    * @param {string} enterAnimationDuration
    * @param {string} exitAnimationDuration
@@ -48,7 +45,7 @@ export class FormComponent {
   deleteFormDetails(index: number) {
     const enterAnimationDuration = '0ms';
     const exitAnimationDuration = '0ms';
-    const dialog = this.dialog.open(DialogComponent, {
+    const dialog = this.dialog.open(ConfirmationDialogComponent, {
       width: '300px',
       enterAnimationDuration,
       exitAnimationDuration,
