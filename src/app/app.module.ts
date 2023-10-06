@@ -20,6 +20,10 @@ import { MatRadioModule } from '@angular/material/radio';
 import { PreviewComponent } from './preview/preview.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { NumberDirective } from './number.directive';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ToastrModule } from 'ngx-toastr';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +32,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     AddQuestionsComponent,
     AddFormComponent,
     PreviewComponent,
+    NumberDirective,
+    ConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,6 +49,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatRadioModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatDialogModule,
+    ToastrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

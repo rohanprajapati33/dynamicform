@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -10,7 +10,8 @@ import { ActivatedRoute } from '@angular/router';
 export class PreviewComponent {
   questionsData: any;
   index: any;
-  // form!: FormGroup;
+  createForm!: FormGroup;
+
   constructor(
     private route: ActivatedRoute,
     private formbuilder: FormBuilder
@@ -19,17 +20,7 @@ export class PreviewComponent {
   ngOnInit() {
     this.index = this.route.snapshot.paramMap.get('i');
     this.showQuestionsData();
-
-    // this.form = this.formbuilder.group({
-    //   questions: ['', Validators.required],
-    //   type: ['', Validators.required],
-    //   option: this.formbuilder.array([]),
-    //   validations: ['', Validators.required],
-    //   inputField1: [''],
-    //   inputField2: [''],
-    //   minValue: [''],
-    //   maxValue: [''],
-    // });
+    this.formGroup();
   }
 
   showQuestionsData() {
@@ -37,5 +28,32 @@ export class PreviewComponent {
       JSON.parse(localStorage.getItem('add-questions') as any) || [];
     this.questionsData = questionsData[+this.index];
     return this.questionsData;
+  }
+
+  formGroup() {
+    this.createForm = this.formbuilder.group({
+      text: ['', Validators.required],
+      number: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(this.questionsData.minValue),
+          Validators.maxLength(this.questionsData.maxValue),
+        ],
+      ],
+      textarea: ['', Validators.required],
+      date: ['', Validators.required],
+      dropdown: ['', Validators.required],
+      checkbox: ['', Validators.required],
+    });
+  }
+  /**
+   *This Function is store data in local storage
+   *
+   * @memberof PreviewComponent
+   */
+  onSubmit() {
+    this.createForm.markAllAsTouched();
+    localStorage.setItem('form-data', JSON.stringify(this.createForm.value));
   }
 }

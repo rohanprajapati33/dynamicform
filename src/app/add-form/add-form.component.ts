@@ -9,15 +9,17 @@ import { Router } from '@angular/router';
 })
 export class AddFormComponent {
   addForm!: FormGroup;
-
   constructor(private formbuilder: FormBuilder, private router: Router) {}
-
   ngOnInit() {
     this.addForm = this.formbuilder.group({
       formName: ['', Validators.required],
     });
   }
-
+  /**
+   *This function used to route to add-questions page with formname
+   * @return {*}
+   * @memberof AddFormComponent
+   */
   addQuestions() {
     if (this.addForm.invalid) return;
     this.router.navigate(['/add-que', this.addForm.value.formName]);

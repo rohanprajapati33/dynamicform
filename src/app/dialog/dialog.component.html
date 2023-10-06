@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Delete form</h1>
+<div mat-dialog-content>Would you like to delete this Form?</div>
+<div mat-dialog-actions>
+  <button mat-raised-button mat-button mat-dialog-close>No</button>
+  <button
+    mat-raised-button
+    color="warn"
+    mat-dialog-close
+    class="ok-btn"
+    cdkFocusInitial
+    (click)="onOkClick()"
+  >
+    Ok
+  </button>
+</div>
