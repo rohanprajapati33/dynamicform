@@ -20,11 +20,7 @@ export class AddFormComponent {
 
   addQuestions() {
     if (this.addForm.invalid) return;
-    // localStorage.setItem('add-form', JSON.stringify(this.addForm.value));
-    const storeAddFormName =
-      JSON.parse(localStorage.getItem('add-form') as '[]') || [];
-    storeAddFormName.push(this.addForm.value);
-    localStorage.setItem('add-form', JSON.stringify(storeAddFormName));
+
     this.router.navigate(['/add-que', this.addForm.value.formName]);
   }
 }

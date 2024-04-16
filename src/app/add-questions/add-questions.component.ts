@@ -50,8 +50,9 @@ export class AddQuestionsComponent {
       minValue: [''],
       maxValue: [''],
     });
+
+    this.formName = this.route.snapshot.paramMap.get('formName') || '';
     this.showQuestions();
-    // this.formName = this.route.snapshot.paramMap.get('formName') || '';
   }
 
   addQuestions() {
@@ -65,7 +66,6 @@ export class AddQuestionsComponent {
       this.saveToLocalstorage();
       this.addQuestionsForm.reset();
     }
-    console.log(this.addQuestionsFormArray);
   }
 
   optionFormGroup() {
@@ -92,22 +92,34 @@ export class AddQuestionsComponent {
 
   saveToLocalstorage() {
     if (this.addQuestionsForm.invalid) return;
-    const storedQueData =
-      JSON.parse(localStorage.getItem('add-questions') as '[]') || [];
-    if (this.isEditDetails) {
-      storedQueData[this.editIndex] = this.addQuestionsForm.value;
+    const formName = this.formName;
+    const storedQueData = JSON.parse(
+      localStorage.getItem('add-questions') || '[]'
+    );
+    const formIndex = storedQueData.findIndex(
+      (data: any) => data.formName === formName
+    );
+
+    if (formIndex !== -1) {
+      storedQueData[formIndex].questions = this.addQuestionsFormArray;
       this.isEditDetails = false;
     } else {
-      storedQueData.push(this.addQuestionsForm.value);
+      storedQueData.push({
+        formName: formName,
+        questions: this.addQuestionsFormArray,
+      });
     }
     localStorage.setItem('add-questions', JSON.stringify(storedQueData));
   }
 
   showQuestions() {
-    const storedQueData = JSON.parse(
-      localStorage.getItem('add-questions') || '[]'
+    const storeData = JSON.parse(localStorage.getItem('add-questions') || '[]');
+    const formData = storeData.find(
+      (data: any) => data.formName === this.formName
     );
-    this.addQuestionsFormArray = storedQueData;
+    if (formData) {
+      this.addQuestionsFormArray = formData.questions;
+    }
   }
 
   addOption() {
