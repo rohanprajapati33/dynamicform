@@ -1,10 +1,14 @@
 .form {
   margin-top: 20px;
   text-align: center;
-  background-color: rgba(255, 255, 255, 0.571);
+  background-color: var(--offWhite);
   height: 50%;
   width: 50%;
   border-radius: 5px;
+}
+
+.form-field {
+  margin: 10px;
 }
 
 .home-button {
@@ -25,18 +29,27 @@
 }
 
 .questions {
-  background-color: rgba(255, 0, 0, 0.61);
-  color: white;
-  height: 45px;
+  background-color: var(--red);
+  color: var(--white);
   margin: 10px;
-  row-gap: 10px;
   border-radius: 5px;
-  text-align: left;
   font-size: larger;
 }
 
+.question-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.question-text {
+  flex: 1;
+  text-align: left;
+  margin-left: 10px;
+}
+
 .button {
-  float: right;
+  text-align: right;
 }
 
 .add-option-btn {
