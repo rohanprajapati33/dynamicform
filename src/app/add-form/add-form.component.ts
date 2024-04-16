@@ -22,6 +22,7 @@ export class AddFormComponent {
     if (this.addForm.invalid) {
       return;
     }
+    localStorage.setItem('add-form', JSON.stringify(this.addForm.value));
     this.router.navigate(['/add-que']);
   }
 }
