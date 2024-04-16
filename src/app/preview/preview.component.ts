@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-preview',
@@ -7,16 +9,33 @@ import { Component } from '@angular/core';
 })
 export class PreviewComponent {
   questionsData: any;
+  index: any;
+  // form!: FormGroup;
+  constructor(
+    private route: ActivatedRoute,
+    private formbuilder: FormBuilder
+  ) {}
 
   ngOnInit() {
+    this.index = this.route.snapshot.paramMap.get('i');
     this.showQuestionsData();
-    console.log(this.questionsData);
+
+    // this.form = this.formbuilder.group({
+    //   questions: ['', Validators.required],
+    //   type: ['', Validators.required],
+    //   option: this.formbuilder.array([]),
+    //   validations: ['', Validators.required],
+    //   inputField1: [''],
+    //   inputField2: [''],
+    //   minValue: [''],
+    //   maxValue: [''],
+    // });
   }
 
   showQuestionsData() {
-    this.questionsData = JSON.parse(
-      localStorage.getItem('add-questions') as any
-    );
+    const questionsData =
+      JSON.parse(localStorage.getItem('add-questions') as any) || [];
+    this.questionsData = questionsData[+this.index];
     return this.questionsData;
   }
 }

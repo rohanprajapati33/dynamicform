@@ -1,3 +1,105 @@
-<div *ngFor="let form of questionsData; let i = index" class="form">
-  <h1 class="form-name">{{ form.formName }}</h1>
+<div class="form">
+  <h1>{{ questionsData.formName }}</h1>
+
+  <form>
+    <ng-container
+      *ngFor="let formData of questionsData.questions; let i = index"
+    >
+      <mat-form-field
+        appearance="outline"
+        class="form-field"
+        *ngIf="formData.type === 'text'"
+      >
+        <mat-label>{{ formData.questions }}</mat-label>
+        <input
+          matInput
+          [placeholder]="formData.questions"
+          [required]="formData.validations"
+        />
+      </mat-form-field>
+
+      <mat-form-field
+        appearance="outline"
+        class="form-field"
+        *ngIf="formData.type === 'number'"
+      >
+        <mat-label>{{ formData.questions }}</mat-label>
+        <input
+          matInput
+          [placeholder]="formData.questions"
+          [required]="formData.validations"
+        />
+      </mat-form-field>
+
+      <mat-form-field
+        appearance="outline"
+        class="form-field"
+        *ngIf="formData.type === 'dropdown'"
+      >
+        <mat-label>{{ formData.questions }}</mat-label>
+        <select matNativeControl required>
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="mercedes">Mercedes</option>
+          <option value="audi">Audi</option>
+        </select>
+      </mat-form-field>
+
+      <mat-form-field
+        appearance="outline"
+        class="form-field"
+        *ngIf="formData.type === 'textarea'"
+      >
+        <mat-label>Textarea</mat-label>
+        <textarea matInput [placeholder]="formData.questions">sdsdsds</textarea>
+      </mat-form-field>
+
+      <mat-radio-group
+        *ngIf="formData.type === 'radio'"
+        aria-label="Select an option"
+      >
+        <mat-radio-button value="1">Option 1</mat-radio-button>
+        <mat-radio-button value="2">Option 2</mat-radio-button>
+      </mat-radio-group>
+
+      <mat-form-field
+        appearance="outline"
+        class="form-field"
+        *ngIf="formData.type === 'date'"
+      >
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="picker" />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </ng-container>
+  </form>
 </div>
+
+<!-- <textarea
+          *ngIf="formData.type === 'textarea'"
+          matInput
+          placeholder="Ex. It makes me feel..."
+        ></textarea> -->
+
+<!-- <mat-select *ngIf="formData.type === 'dropdown'">
+        <mat-option value="">
+          {{ formData.option[0].option1 }}
+        </mat-option>
+      </mat-select> -->
+
+<!-- <mat-radio-group
+        *ngIf="formData.type === 'radio'"
+        aria-label="Select an option"
+      >
+        <mat-radio-button value="1">Option 1</mat-radio-button>
+        <mat-radio-button value="2">Option 2</mat-radio-button>
+      </mat-radio-group> -->
+
+<!-- <mat-select multiple *ngIf="formData.type === 'checkbox'">
+        <mat-option [value]=""></mat-option>
+      </mat-select> -->
